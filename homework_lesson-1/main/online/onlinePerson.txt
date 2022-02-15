@@ -1,0 +1,6 @@
+AGE:15
+CITY:Rivne
+NAME:Vasyl
+AGE:19
+NAME:Vova
+CITY:Dnipro

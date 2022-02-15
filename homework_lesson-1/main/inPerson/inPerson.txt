@@ -1,0 +1,6 @@
+CITY:Lviv
+AGE:22
+NAME:Andrii
+NAME:Nikita
+AGE:24
+CITY:Kherson
