@@ -1,0 +1,23 @@
+{
+  "name": "okten_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hw_cw_2/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Serhii-Bondarenko/okten_node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Serhii-Bondarenko/okten_node/issues"
+  },
+  "homepage": "https://github.com/Serhii-Bondarenko/okten_node#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.2"
+  }
+}
