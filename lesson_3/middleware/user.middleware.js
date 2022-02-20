@@ -1,4 +1,4 @@
-const users = require("../db/users");
+const users = require('../db/users');
 
 module.exports = {
 
@@ -9,28 +9,24 @@ module.exports = {
             if (emptyField) throw new Error('Fields can not be empty!');
 
             next();
-
         } catch (err) {
-            response.status(400).send(err.message);
+            response.redirect(`/error?error=${err.message}`);
         }
     },
 
     copy: ({body}, response, next) => {
-
         try {
             const userCopy = users.find(user => user.email === body.email);
 
             if (userCopy) throw new Error('This user has been already exist');
 
             next();
-
         } catch (err) {
-            response.status(400).send(err.message);
+            response.redirect(`/error?error=${err.message}`);
         }
     },
 
     notFound: (request, response, next) => {
-
         try {
             const user = users.find(user => user.id === +request.params.userId);
 
@@ -38,12 +34,9 @@ module.exports = {
 
             request.user = user;
             next();
-
         } catch (err) {
-
-            response.status(400).send(err.message);
+            response.redirect(`/error?error=${err.message}`);
         }
-
     },
 
     auth: (request, response, next) => {
@@ -55,9 +48,7 @@ module.exports = {
             request.user = user;
             next();
         } catch (err) {
-
-            response.status(400).send(err.message);
+            response.redirect(`/error?error=${err.message}`);
         }
-
     }
 }

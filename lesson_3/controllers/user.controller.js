@@ -1,8 +1,7 @@
-const users = require("../db/users");
+const users = require('../db/users');
 
 module.exports = {
     getAllUsers: ({query}, response) => {
-
         if (Object.keys(query).length) {
             let filteredUsers = [...users];
 
