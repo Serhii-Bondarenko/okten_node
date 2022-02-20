@@ -10,7 +10,7 @@ router.use('/login', loginRouter);
 router.use('/users', userRouter);
 router.use('/signIn', signInRouter);
 
-router.use(({query:{error}}, response) => {
+router.use(({query: {error}}, response) => {
     response.render('error', {error});
 });
 
