@@ -1,9 +1,9 @@
 const {Router} = require('express');
 
-userRouter = Router();
-
 const {userController} = require('../controllers');
 const {userMiddlewere} = require('../middleware');
+
+userRouter = Router();
 
 userRouter.get('/', userController.getAllUsers);
 userRouter.get('/:userId', userMiddlewere.notFound, userController.getUserById);
