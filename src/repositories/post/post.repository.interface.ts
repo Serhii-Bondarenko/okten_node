@@ -1,4 +1,4 @@
-import { IPost } from '../../entity/post';
+import { IPost } from '../../entity';
 
 export interface IPostRepository {
     createPost(post: IPost): Promise<IPost> ;

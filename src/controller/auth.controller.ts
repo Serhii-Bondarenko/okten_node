@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 
-import { authService } from '../services/auth.service';
-import { COOKIE } from '../constants/cookie';
-import { ITokenData } from '../interfaces/token.interface';
+import { authService, tokenService } from '../services';
+import { COOKIE } from '../constants';
+import { ITokenData } from '../interfaces';
+import { IRequestExtended } from '../interfaces/requestExtended.interface';
+import { IUser } from '../entity';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
@@ -14,6 +16,16 @@ class AuthController {
         );
 
         return res.json(data);
+    }
+
+    public async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
+        const { id } = req.user as IUser;
+
+        res.clearCookie(COOKIE.nameRefreshToken);
+
+        await tokenService.deleteUserTokenPair(id);
+
+        return res.json('OK');
     }
 }
 

@@ -1,5 +1,5 @@
-import { IPost } from '../entity/post';
-import { postRepository } from '../repositories/post/post.repository';
+import { IPost } from '../entity';
+import { postRepository } from '../repositories';
 
 class PostService {
     public async createPost(post: IPost): Promise<IPost> {

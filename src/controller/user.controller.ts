@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import { IUser } from '../entity/user';
-import { userService } from '../services/user.service';
+import { IUser } from '../entity';
+import { userService } from '../services';
 
 class UserController {
     public async getUsers(req: Request, res: Response): Promise<Response<IUser[]>> {

@@ -1,4 +1,4 @@
-import { IComment } from '../../entity/comment';
+import { IComment } from '../../entity';
 
 export interface ICommentRepository {
     createComment(comment: IComment): Promise<IComment>;

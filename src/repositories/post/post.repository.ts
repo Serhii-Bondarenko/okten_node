@@ -1,6 +1,6 @@
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
-import { IPost, Post } from '../../entity/post';
+import { IPost, Post } from '../../entity';
 import { IPostRepository } from './post.repository.interface';
 
 @EntityRepository(Post)

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { getManager } from 'typeorm';
 
-import { Comment, IComment } from '../entity/comment';
-import { commentService } from '../services/comment.service';
+import { Comment, IComment } from '../entity';
+import { commentService } from '../services';
 
 class CommentController {
     public async createComment(req: Request, res: Response): Promise<Response<IComment>> {

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
-import { IUser } from '../entity/user';
-import { userRepository } from '../repositories/user/user.repository';
+import { IUser } from '../entity';
+import { userRepository } from '../repositories';
 
 class UserService {
     public async getUsers(): Promise<IUser[]> {

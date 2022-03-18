@@ -1,6 +1,6 @@
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
-import { Comment, IComment } from '../../entity/comment';
+import { Comment, IComment } from '../../entity';
 import { ICommentRepository } from './comment.repository.interface';
 
 @EntityRepository(Comment)

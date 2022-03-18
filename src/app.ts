@@ -15,7 +15,7 @@
 import express from 'express';
 import { createConnection } from 'typeorm';
 
-import { apiRouter } from './routes/api.router';
+import { apiRouter } from './routes';
 import { config } from './config/config';
 
 const app = express();
