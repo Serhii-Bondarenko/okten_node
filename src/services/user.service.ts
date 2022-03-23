@@ -29,6 +29,14 @@ class UserService {
         return userRepository.deleteUser(id);
     }
 
+    public async compareUserPasswords(password: string, hash: string): Promise<void | Error> {
+        const isPasswordUnique = await bcrypt.compare(password, hash);
+
+        if (!isPasswordUnique) {
+            throw new Error('Email or password is wrong');
+        }
+    }
+
     private async _hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
