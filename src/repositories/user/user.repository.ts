@@ -24,10 +24,9 @@ class UserRepository extends Repository<User> implements IUserRepository {
         return getManager().getRepository(User).save(user);
     }
 
-    public async updateUser(id: number, email: string, password: string): Promise<IUser | object> {
+    public async updateUserPassword(id: number, password: string): Promise<IUser | object> {
         return getManager().getRepository(User)
             .update({ id }, {
-                email,
                 password,
             });
     }

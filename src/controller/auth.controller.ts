@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { authService, tokenService, userService } from '../services';
 import { COOKIE } from '../constants';
@@ -18,7 +18,7 @@ class AuthController {
         return res.json(data);
     }
 
-    public async login(req: IRequestExtended, res: Response) {
+    public async login(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { id, email, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
@@ -40,8 +40,7 @@ class AuthController {
                 user: req.body,
             });
         } catch (e) {
-            console.log(e);
-            res.status(400).json(e);
+            next(e);
         }
     }
 
@@ -55,7 +54,7 @@ class AuthController {
         return res.json('OK');
     }
 
-    public async refreshToken(req: IRequestExtended, res: Response) {
+    public async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { id, email } = req.user as IUser;
             const currentRefreshToken = req.get('Authorization');
@@ -77,8 +76,7 @@ class AuthController {
                 user: req.user,
             });
         } catch (e) {
-            console.log(e);
-            res.status(400).json(e);
+            next(e);
         }
     }
 }

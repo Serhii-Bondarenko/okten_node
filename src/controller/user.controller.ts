@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 
 import { IUser } from '../entity';
-import { userService } from '../services';
+import { tokenService, userService } from '../services';
+import { COOKIE } from '../constants';
 
 class UserController {
     public async getUsers(req: Request, res: Response): Promise<Response<IUser[]>> {
@@ -20,11 +21,15 @@ class UserController {
         return res.json(user);
     }
 
-    public async updateUser(req: Request, res: Response): Promise<Response<IUser>> {
+    public async updateUserPassword(req: Request, res: Response): Promise<Response<IUser>> {
         const { id } = req.params;
-        const { email, password } = req.body;
-        const updatedUser = await userService.updateUser(Number(id), email, password);
-        return res.json(updatedUser);
+
+        res.clearCookie(COOKIE.nameRefreshToken);
+        await tokenService.deleteUserTokenPair(Number(id));
+
+        const { password } = req.body;
+        const updatedPassword = await userService.updateUserPassword(Number(id), password);
+        return res.json(updatedPassword);
     }
 
     public async deleteUser(req: Request, res: Response): Promise<void | object> {

@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { getManager } from 'typeorm';
 
 import { Comment, IComment } from '../entity';
 import { commentService } from '../services';
+import { ErrorHandler } from '../error/error.handler';
 
 class CommentController {
     public async createComment(req: Request, res: Response): Promise<Response<IComment>> {
@@ -16,15 +17,14 @@ class CommentController {
         return res.json(comments);
     }
 
-    public async actionOnComment(req: Request, res: Response):
+    public async actionOnComment(req: Request, res: Response, next: NextFunction):
         Promise<Response<IComment | undefined>> {
         const { action, commentId } = req.body;
         const queryRunner = getManager().getRepository(Comment);
         const comment = await commentService.actionOnComment(action, commentId);
 
         if (!comment) {
-            console.log('wrong comment ID');
-            return res.sendStatus(400);
+            throw next(new ErrorHandler('wrong comment ID', 400));
         }
 
         if (action === 'like') {

@@ -1,8 +1,10 @@
 import { Response, NextFunction } from 'express';
+
 import { IRequestExtended } from '../interfaces';
 import { userRepository } from '../repositories';
 import { IUser } from '../entity';
 import { userSchema } from '../validator';
+import { ErrorHandler } from '../error/error.handler';
 
 class UserMiddleware {
     async checkIsUserExist(req: IRequestExtended, res: Response, next: NextFunction):
@@ -11,37 +13,53 @@ class UserMiddleware {
             const userFromDb = userRepository.getUserByEmail(req.body.email);
 
             if (!userFromDb) {
-                res.status(400).json('User not found');
+                next(new ErrorHandler('User not found', 404));
                 return;
             }
 
             req.user = await userFromDb;
             next();
         } catch (e) {
-            res.status(400).json(e);
+            next(e);
         }
     }
 
     async checkUserData(req: IRequestExtended, res: Response, next: NextFunction):
         Promise<IUser | undefined> {
         try {
-            const { error } = await userSchema.validate(req.body);
+            let issue = await userSchema.create.validate(req.body);
 
-            if (error) {
-                res.status(422).json({
-                    message: 'Invalid request',
-                    data: error.message,
-                });
+            if (Object.keys(req.body).length === 2) {
+                issue = await userSchema.login.validate(req.body);
+            }
 
+            if (Object.keys(req.body).length === 1) {
+                issue = await userSchema.updatePassword.validate(req.body);
+            }
+
+            if (issue.error) {
+                next(new ErrorHandler(issue.error.message, 422));
                 return;
             }
 
             next();
         } catch (e: any) {
-            res.json({
-                status: 400,
-                message: e.message,
-            });
+            next(e);
+        }
+    }
+
+    async checkEmailAsParams(req: IRequestExtended, res: Response, next: NextFunction):
+        Promise<string | undefined> {
+        try {
+            const { error } = await userSchema.emailParams.validate(req.params);
+            if (error) {
+                next(new ErrorHandler(error.message, 400));
+                return;
+            }
+
+            next();
+        } catch (e: any) {
+            next(e);
         }
     }
 }

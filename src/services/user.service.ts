@@ -21,8 +21,9 @@ class UserService {
         return userRepository.createUser(dataToSave);
     }
 
-    public async updateUser(id: number, email: string, password: string): Promise<IUser | object> {
-        return userRepository.updateUser(id, email, password);
+    public async updateUserPassword(id: number, password: string): Promise<IUser | object> {
+        const hashedPassword = await this._hashPassword(password);
+        return userRepository.updateUserPassword(id, hashedPassword);
     }
 
     public async deleteUser(id: number): Promise<void | object> {

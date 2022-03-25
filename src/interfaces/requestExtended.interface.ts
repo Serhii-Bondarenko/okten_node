@@ -1,7 +1,8 @@
 import { Request } from 'express';
 
-import { IUser } from '../entity';
+import { IPost, IUser } from '../entity';
 
 export interface IRequestExtended extends Request{
-    user?: IUser
+    user?: IUser,
+    post?:IPost,
 }
