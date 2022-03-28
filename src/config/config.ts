@@ -14,4 +14,7 @@ export const config = {
     EXPIRES_IN_REFRESH: process.env.EXPIRES_IN_REFRESH,
 
     USER_SALT_ROUNDS: process.env.USER_SALT_ROUNDS,
+
+    ROOT_EMAIL: process.env.ROOT_EMAIL,
+    ROOT_PASSWORD: process.env.ROOT_PASSWORD,
 };
