@@ -15,6 +15,6 @@ export const config = {
 
     USER_SALT_ROUNDS: process.env.USER_SALT_ROUNDS,
 
-    ROOT_EMAIL: process.env.ROOT_EMAIL,
-    ROOT_PASSWORD: process.env.ROOT_PASSWORD,
+    NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL,
+    NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD,
 };

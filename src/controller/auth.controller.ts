@@ -1,14 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { authService, tokenService, userService } from '../services';
-import { COOKIE } from '../constants';
-import { ITokenData, IRequestExtended } from '../interfaces';
+import {
+    authService, emailService, tokenService, userService,
+} from '../services';
+import { COOKIE, emailActionEnum } from '../constants';
+import { IRequestExtended, ITokenData } from '../interfaces';
 import { IUser } from '../entity';
 import { tokenRepository } from '../repositories';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
         const data = await authService.registration(req.body);
+
+        await emailService.sendMail(req.body.email, emailActionEnum.WELCOME);
+
         res.cookie(
             COOKIE.nameRefreshToken,
             data.refreshToken,
@@ -24,6 +29,7 @@ class AuthController {
             const { password } = req.body;
 
             await userService.compareUserPasswords(password, hashPassword);
+            await emailService.sendMail(email, emailActionEnum.USER_ENTER);
 
             const { accessToken, refreshToken } = await tokenService.generateTokenPair(
                 {
