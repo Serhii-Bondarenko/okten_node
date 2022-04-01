@@ -10,12 +10,12 @@ class TokenService {
         Promise<ITokenPair> {
         const accessToken = jwt.sign(
             payload,
-            config.SECRET_ACCESS_KEY as string,
+            config.SECRET_ACCESS_KEY,
             { expiresIn: config.EXPIRES_IN_ACCESS },
         );
         const refreshToken = jwt.sign(
             payload,
-            config.SECRET_REFRESH_KEY as string,
+            config.SECRET_REFRESH_KEY,
             { expiresIn: config.EXPIRES_IN_REFRESH },
         );
 
@@ -52,7 +52,15 @@ class TokenService {
             secretWord = config.SECRET_REFRESH_KEY;
         }
 
-        return jwt.verify(authToken, secretWord as string) as IUserPayload;
+        if (tokenType === 'action') {
+            secretWord = config.SECRET_ACTION_KEY;
+        }
+
+        return jwt.verify(authToken, secretWord) as IUserPayload;
+    }
+
+    public generateActionToken(payload: IUserPayload): string {
+        return jwt.sign(payload, config.SECRET_ACTION_KEY, { expiresIn: config.EXPIRES_IN_ACTION });
     }
 }
 

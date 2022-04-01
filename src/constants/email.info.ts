@@ -1,13 +1,18 @@
-import { emailActionEnum } from './enums';
+import { EmailActionEnum } from './enums';
 
 export const emailInfo = {
-    [emailActionEnum.WELCOME]: {
+    [EmailActionEnum.WELCOME]: {
         subject: 'Welcome to IFilm',
-        html: 'Welcome to our website',
+        templateName: 'welcome',
     },
 
-    [emailActionEnum.USER_ENTER]: {
+    [EmailActionEnum.USER_ENTER]: {
         subject: 'Salute!',
-        html: 'You have successfully logged in',
+        templateName: 'signIn',
+    },
+
+    [EmailActionEnum.FORGOT_PASSWORD]: {
+        subject: 'Update your password',
+        templateName: 'forgotPassword',
     },
 };

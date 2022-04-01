@@ -5,28 +5,35 @@ import {
 import { CommonFields, ICommonFields } from './commonFields';
 import { User } from './user';
 import { config } from '../config/config';
+import { ActionTokenTypes } from '../enums/actionTokenTypes.enum';
 
-export interface IToken extends ICommonFields{
-    refreshToken: string;
-    accessToken: string;
+export interface IActionToken extends ICommonFields{
+    actionToken: string;
+    type: ActionTokenTypes;
     userId: number;
 }
 
-@Entity('tokens', { database: config.MYSQL_DATABASE_NAME })
-export class Token extends CommonFields implements IToken {
+export interface IActionTokenForSave {
+    actionToken: string;
+    type: ActionTokenTypes;
+    userId: number;
+}
+
+@Entity('actiontokens', { database: config.MYSQL_DATABASE_NAME })
+export class ActionToken extends CommonFields implements IActionToken {
     @Column({
         type: 'varchar',
         width: 250,
         nullable: false,
     })
-        refreshToken: string;
+        actionToken: string;
 
     @Column({
         type: 'varchar',
         width: 250,
         nullable: false,
     })
-        accessToken: string;
+        type: ActionTokenTypes;
 
     @Column({
         type: 'int',

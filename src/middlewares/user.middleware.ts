@@ -62,6 +62,36 @@ class UserMiddleware {
             next(e);
         }
     }
+
+    async checkValidEmail(req: IRequestExtended, res: Response, next: NextFunction):
+        Promise<string | undefined> {
+        try {
+            const { error } = await userSchema.emailParams.validate(req.body);
+            if (error) {
+                next(new ErrorHandler(error.message, 400));
+                return;
+            }
+
+            next();
+        } catch (e: any) {
+            next(e);
+        }
+    }
+
+    async checkValidPassword(req: IRequestExtended, res: Response, next: NextFunction):
+        Promise<string | undefined> {
+        try {
+            const { error } = await userSchema.updatePassword.validate(req.body);
+            if (error) {
+                next(new ErrorHandler(error.message, 400));
+                return;
+            }
+
+            next();
+        } catch (e: any) {
+            next(e);
+        }
+    }
 }
 
 export const userMiddleware = new UserMiddleware();

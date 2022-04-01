@@ -18,6 +18,9 @@ import { createConnection } from 'typeorm';
 import { apiRouter } from './routes';
 import { config } from './config/config';
 
+// @ts-ignore
+global.rootDir = __dirname;
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

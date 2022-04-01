@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 
 import { tokenService, userService } from '../services';
 import { IRequestExtended } from '../interfaces';
-import { tokenRepository } from '../repositories';
+import { actionTokenRepository, tokenRepository } from '../repositories';
 import { ErrorHandler } from '../error/error.handler';
 import { headers } from '../constants';
 
@@ -56,6 +56,41 @@ class AuthMiddleware {
             next();
         } catch (e: any) {
             next(e);
+        }
+    }
+
+    public async checkActionToken(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const actionToken = req.get(headers.AUTHORIZATION);
+
+            if (!actionToken) {
+                next(new ErrorHandler('No token'));
+                return;
+            }
+
+            const { userEmail } = tokenService.verifyToken(actionToken, 'action');
+
+            const tokenFromDB = await actionTokenRepository.findByParams({ actionToken });
+
+            if (!tokenFromDB) {
+                next(new ErrorHandler('Token not valid', 401));
+                return;
+            }
+
+            const userFromToken = await userService.getUserByEmail(userEmail);
+
+            if (!userFromToken) {
+                next(new ErrorHandler('Token not valid', 401));
+                return;
+            }
+
+            req.user = userFromToken;
+            next();
+        } catch (e: any) {
+            res.status(401).json({
+                status: 401,
+                message: e.message,
+            });
         }
     }
 }

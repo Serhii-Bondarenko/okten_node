@@ -1,11 +1,25 @@
-import nodemailer from 'nodemailer';
+import path from 'path';
+import nodemailer, { SentMessageInfo } from 'nodemailer';
+import EmailTemplates from 'email-templates';
 
 import { config } from '../config/config';
-import { emailActionEnum, emailInfo } from '../constants';
+import { EmailActionEnum, emailInfo, headers } from '../constants';
 
 class EmailService {
-    sendMail(userMail: string, action: emailActionEnum) {
-        const { subject, html } = emailInfo[action];
+    async sendMail(userMail: string, action: EmailActionEnum, context: {}):
+        Promise<SentMessageInfo> {
+        const { subject, templateName } = await emailInfo[action];
+
+        const templateParser = await new EmailTemplates({
+            views: {
+                // @ts-ignore
+                root: path.join(global.rootDir, 'email-templates'),
+            },
+        });
+
+        Object.assign(context, { frontendUrl: headers.FRONTEND_URL });
+
+        const html = await templateParser.render(templateName, context);
 
         const emailTransporter = nodemailer.createTransport({
             from: 'IFilm',
