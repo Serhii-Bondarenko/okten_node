@@ -9,10 +9,15 @@ export const mailingList = async () => {
         console.log('START WORK WITH mailingList');
         const users = await userRepository.getUsers();
         console.log(users);
-        users.forEach((user) => {
-            emailService.sendMail(user.email, EmailActionEnum.MAILING_LIST, {
-                userName: user.firstName,
-            });
+        const usersWithMail = users.map(async (user) => {
+            const sendActions = await emailService
+                .sendMail(user.email, EmailActionEnum.MAILING_LIST, {
+                    userName: user.firstName,
+                });
+
+            return sendActions;
         });
+
+        await Promise.all(usersWithMail);
     });
 };
