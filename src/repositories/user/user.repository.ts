@@ -1,7 +1,12 @@
+import dayjs from 'dayjs';
+import uts from 'dayjs/plugin/utc';
 import { EntityRepository, getManager, Repository } from 'typeorm';
 
 import { IUser, User } from '../../entity';
 import { IUserRepository } from './user.repository.interface';
+import { IPaginationResponse } from '../../interfaces';
+
+dayjs.extend(uts);
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> implements IUserRepository {
@@ -35,6 +40,34 @@ class UserRepository extends Repository<User> implements IUserRepository {
         return getManager()
             .getRepository(User)
             .softDelete({ id });
+    }
+
+    public getNewUsers(): Promise<IUser[]> {
+        return getManager().getRepository(User)
+            .createQueryBuilder('user')
+            .where('user.createdAt >= :date', { date: dayjs().utc().startOf('day').format() })
+            .getMany();
+    }
+
+    public async getUserPagination(
+        limit: number,
+        page: number = 1,
+        searchObject: Partial<IUser> = {},
+    )
+        :Promise<IPaginationResponse<IUser>> {
+        const skip = limit * (page - 1);
+
+        console.log(searchObject);
+
+        const [users, itemCount] = await getManager().getRepository(User)
+            .findAndCount({ where: searchObject, skip, take: limit });
+
+        return {
+            page,
+            perPage: limit,
+            itemCount,
+            data: users,
+        };
     }
 }
 

@@ -15,4 +15,9 @@ export const emailInfo = {
         subject: 'Update your password',
         templateName: 'forgotPassword',
     },
+
+    [EmailActionEnum.MAILING_LIST]: {
+        subject: 'This is every day email for you!',
+        templateName: 'cronMailing',
+    },
 };

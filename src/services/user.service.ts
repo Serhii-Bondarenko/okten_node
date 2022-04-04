@@ -12,6 +12,10 @@ class UserService {
         return userRepository.getUserByEmail(email);
     }
 
+    public async getUserPagination(filterObject: any, page: number, perPage: number) {
+        return userRepository.getUserPagination(perPage, page, filterObject);
+    }
+
     public async createUser(user: IUser): Promise<IUser> {
         const { password } = user;
 

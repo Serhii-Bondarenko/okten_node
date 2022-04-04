@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { IUser } from '../entity';
 import { tokenService, userService } from '../services';
@@ -36,6 +36,22 @@ class UserController {
         const { id } = req.params;
         const removedUser = await userService.deleteUser(Number(id));
         return res.json(removedUser);
+    }
+
+    public async getUserPagination(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { page = 1, perPage = 25, ...other } = req.query;
+
+            const userPagination = await userService.getUserPagination(
+                other,
+                Number(page),
+                Number(perPage),
+            );
+
+            res.json(userPagination);
+        } catch (e) {
+            next(e);
+        }
     }
 }
 
