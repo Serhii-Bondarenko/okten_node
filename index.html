@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title> </title>
+</head>
+<body>
+
+<button id='send'>Send to all online users</button>
+<br>
+<br>
+<button id='sendInRoom1'>Send to room-visitors 1111</button>
+<br>
+<br>
+<button id='sendInRoom2'>Send to room-visitors 2222</button>
+<br>
+<br>
+<button id='1'>Room-1</button>
+<button id='2'>Room-2</button>
+
+<script>
+
+    const socket = io('http://localhost:5500', { query: 'userId=8&accessToken=323213' });
+    
+    console.log(socket);
+
+    const btn = document.getElementById('send');
+    const btnIn1 = document.getElementById('sendInRoom1');
+    const btnIn2 = document.getElementById('sendInRoom2');
+    const joinTo1 = document.getElementById('1');
+    const joinTo2 = document.getElementById('2');
+
+    btn.onclick = () => {
+        socket.emit('messageToAll', { message: 'Hi there!!'})
+    }
+
+    btnIn1.onclick = () => {
+        socket.emit('messageToRoom', { message: 'Hello chat Room1 (11111)!', id: 1, userId: socket.id })
+    }
+
+    btnIn2.onclick = () => {
+        socket.emit('messageToRoom', { message: 'Hello chat Room2 (22222)!', id: 2, userId: socket.id })
+    }
+
+    joinTo1.onclick = () => {
+        socket.emit('joinRoom', { id: 1 });
+    }
+
+    joinTo2.onclick = () => {
+        socket.emit('joinRoom', { id: 2 });
+    }
+
+    socket.on('message:get-all', (data) => {
+        console.log('-------------------------------');
+        console.log(data);
+        console.log('-------------------------------');
+    })
+
+    socket.on('message:get-visitors', (data) => {
+        console.log('-------------------------------');
+        console.log(data);
+        console.log('-------------------------------');
+    })
+
+    socket.on('user_join_room', (data) => {
+        console.log('-------------------------------');
+        console.log(data);
+        console.log('-------------------------------');
+    })
+
+</script>
+
+</body>
+</html>
